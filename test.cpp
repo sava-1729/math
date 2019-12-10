@@ -15,7 +15,7 @@ int main()
     string arr2[] = {"tanmay", "Srivastava", "yatman", "trivas", "sava", "sava", "srivastava"};
     Set<string> S1 = Set<string>(arr, 7);
     Set<string> S2 = Set<string>(arr2, 7);
-    Set<string> S3 = S1 ^ S2;
+    Set<string> S3 = S1 & S2;
     string* elms;
     // int* elms;
     S3.getAllElements(elms);

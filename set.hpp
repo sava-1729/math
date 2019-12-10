@@ -1,32 +1,30 @@
+/*
+ * @file set.hpp
+ * @class Set
+ * @brief contains basic class representing the mathematical object: Set,
+ *        and the mathematical operations one can perform on a set.
+ * @author Vatsal Srivastava
+ * @copyright (c) 2019
+ */
+
 #include <vector>
 #include <iostream>
 #include <algorithm>
 
+#include "utils.hpp"
+
+/**
+ * @class Set
+ * @brief A class representing a set, with overloaded operators for computing
+ *        intersection, union, etc. It may also serve as a base class for other
+ *        classes like Group, Ring, etc.
+ * @tparam the type of elements that the set contains.
+ */
 template <class ElementType>
 class Set
 {
     ElementType* _elements;
     int _order;
-
-    template <typename type>
-    void reduce(type* arr, int &len)const
-    {
-        std::vector<type> reduced;
-        typename std::vector<type>::iterator it;
-        for(int i = 0; i < len; i++)
-        {
-            it = std::find(reduced.begin(), reduced.end(), arr[i]);
-            if(it == reduced.end())
-            {
-                reduced.push_back(arr[i]);
-            }
-        }
-        len = reduced.size();
-        for(int i = 0; i < reduced.size(); i++)
-        {
-            arr[i] = reduced[i];
-        }
-    }
 
     public:
 
@@ -41,7 +39,7 @@ class Set
         }
     }
     
-    const void getAllElements(ElementType* &external_list)const
+    void getAllElements(ElementType* &external_list)const
     {
         external_list = new ElementType[_order];
         for(int i = 0; i < _order; i++)
@@ -65,13 +63,7 @@ class Set
         nb = this -> getOrder();
         if(na > nb)
         {
-            int y = na;
-            na = nb;
-            nb = y;
-            ElementType* c;
-            c = a_elms;
-            a_elms = b_elms;
-            b_elms = c;
+            swap<ElementType>(a_elms, na, b_elms, nb);
         }
         ElementType x;
         std::vector<int> common_indices;
@@ -97,16 +89,32 @@ class Set
         delete[] intersec_list;
         return intersection;
     }
+
+    Set<ElementType> operator&(Set<ElementType> const &A)const
+    {
+        ElementType *a_elms, *b_elms;
+        int na, nb;
+        A.getAllElements(a_elms);
+        getAllElements(b_elms);
+        na = A.getOrder();
+        nb = getOrder();
+        int union_length = na + nb;
+        ElementType* union_elms = new ElementType[union_length];
+        for(int i = 0; i < union_length; i++)
+        {
+            if(i < na)
+            {
+                union_elms[i] = a_elms[i];
+            }
+            else
+            {
+                union_elms[i] = b_elms[i-na];
+            }
+        }
+        //std::cout << "Merged arrays\n";
+        Set<ElementType> Union = Set<ElementType>(union_elms, union_length);
+        delete[] union_elms;
+        return Union;
+    }
 };
 
-// template <class ElementType>
-// Set<ElementType> operator&(Set<ElementType> A, Set<ElementType> B)
-// {
-//     ElementType* a_elms, b_elms;
-//     int na, nb;
-//     A.getAllElements(a_elms);
-//     B.getAllElements(b_elms);
-//     na = A.getOrder();
-//     nb = B.getOrder();
-    
-// }
