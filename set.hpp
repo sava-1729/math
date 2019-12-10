@@ -26,6 +26,19 @@ class Set
     ElementType* _elements;
     int _order;
 
+    bool contains(ElementType x)const
+    {
+        bool flag = false;
+        for(int i = 0; i < _order; i++)
+        {
+            if(_elements[i] == x)
+            {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
     public:
 
     Set(ElementType* elms_, int order_)
@@ -115,6 +128,38 @@ class Set
         Set<ElementType> Union = Set<ElementType>(union_elms, union_length);
         delete[] union_elms;
         return Union;
+    }
+
+    bool operator<(Set<ElementType> const &A)const
+    {
+        bool flag = true;
+        ElementType *self_elms;
+        getAllElements(self_elms);
+        for(int i = 0; i < _order; i++)
+        {
+            flag = flag & A.contains(self_elms[i]);
+        }
+        return flag & (_order < A.getOrder());
+    }
+
+    bool operator>(Set<ElementType> const &A)const
+    {
+        return A < *(this);
+    }
+
+    bool operator==(Set<ElementType> const &A)const
+    {
+        return (*(this) < A) && (A < *(this));
+    }
+
+    bool operator<=(Set<ElementType> const &A)const
+    {
+        return (*(this) < A) || (*(this) == A);
+    }
+
+    bool operator>=(Set<ElementType> const &A)const
+    {
+        return A <= *(this);
     }
 };
 
