@@ -100,6 +100,8 @@ class Set
         }
         Set<ElementType> intersection = Set<ElementType>(intersec_list, intersec_order);
         delete[] intersec_list;
+        delete[] a_elms;
+        delete[] b_elms;
         return intersection;
     }
 
@@ -127,10 +129,33 @@ class Set
         //std::cout << "Merged arrays\n";
         Set<ElementType> Union = Set<ElementType>(union_elms, union_length);
         delete[] union_elms;
+        delete[] a_elms;
+        delete[] b_elms;
         return Union;
     }
 
-    bool operator<(Set<ElementType> const &A)const
+    Set<ElementType> operator-(Set<ElementType> const &A)const
+    {
+        Set<ElementType> intersec = (*this) ^ A;
+        ElementType *elms, *reduced;
+        getAllElements(elms);
+        int neworder = _order - intersec.getOrder();
+        reduced = new ElementType[neworder];
+        for(int i = 0, j = 0; i < _order && j < neworder; i++)
+        {
+            if(!intersec.contains(elms[i]))
+            {
+                reduced[j] = elms[i];
+                j++;
+            }
+        }
+        Set<ElementType> setminus = Set<ElementType>(reduced, neworder);
+        delete[] elms;
+        delete[] reduced;
+        return setminus;    
+    }
+
+    bool operator<=(Set<ElementType> const &A)const
     {
         bool flag = true;
         ElementType *self_elms;
@@ -139,27 +164,27 @@ class Set
         {
             flag = flag & A.contains(self_elms[i]);
         }
-        return flag & (_order < A.getOrder());
-    }
-
-    bool operator>(Set<ElementType> const &A)const
-    {
-        return A < *(this);
-    }
-
-    bool operator==(Set<ElementType> const &A)const
-    {
-        return (*(this) < A) && (A < *(this));
-    }
-
-    bool operator<=(Set<ElementType> const &A)const
-    {
-        return (*(this) < A) || (*(this) == A);
+        return flag;
     }
 
     bool operator>=(Set<ElementType> const &A)const
     {
         return A <= *(this);
+    }
+
+    bool operator<(Set<ElementType> const &A)const
+    {
+        return (*(this) <= A) &&  (_order < A.getOrder());
+    }
+
+    bool operator>(Set<ElementType> const &A)const
+    {
+        return (A <= *(this)) &&  (A.getOrder() < _order);
+    }
+
+    bool operator==(Set<ElementType> const &A)const
+    {
+        return (*(this) <= A) && (A <= *(this));
     }
 };
 
