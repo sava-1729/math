@@ -11,10 +11,10 @@ int main()
     // Set<int> s1 = Set<int>(a, 9);
     // Set<int> s2 = Set<int>(b, 9);
     // Set<int> s3 = s1 ^ s2;
-    string arr[] = {"vatsal", "srivastava", "alstav", "trivas", "sava"};
-    string arr2[] = {"tanmay", "srivastava", "yatman", "trivas", "sava"};
-    Set<string> S1 = Set<string>(arr, 5);
-    Set<string> S2 = Set<string>(arr2, 5);
+    string arr[] = {"vatsal", "srivastava", "alstav", "Trivas", "Sava", "sava", "srivastava"};
+    string arr2[] = {"tanmay", "Srivastava", "yatman", "trivas", "sava", "sava", "srivastava"};
+    Set<string> S1 = Set<string>(arr, 7);
+    Set<string> S2 = Set<string>(arr2, 7);
     Set<string> S3 = S1 ^ S2;
     string* elms;
     // int* elms;
