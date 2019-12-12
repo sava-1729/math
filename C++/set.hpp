@@ -8,7 +8,7 @@
  */
 
 #include <vector>
-#include <iostream>
+#include <iostream> //should be removed after completion of this file.
 #include <algorithm>
 
 #include "utils.hpp"
@@ -188,3 +188,8 @@ class Set
     }
 };
 
+template <class A, class B>
+Set<A> operator*(Set<A> a, Set<A> b)
+{
+
+}
