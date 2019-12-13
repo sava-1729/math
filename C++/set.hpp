@@ -195,10 +195,26 @@ Set<std::tuple<types...>> cartesianProduct()
     return NULL;
 }
 
+template <typename type1>
+Set<std::tuple<type1>> cartesianProduct(Set<type1> set1)
+{
+    type1 *elms;
+    set1.getAllElements(elms);
+    int n = set1.getOrder();
+    std::tuple<type1> *singular = new std::tuple<type1>[n];
+    for(int i = 0; i < n; i++)
+    {
+        singular[i] = std::make_tuple(elms[i]);
+    }
+    Set<std::tuple<type1>> SinSet(singular, n);
+    delete[] elms;
+    delete[] singular;
+    return SinSet;
+}
+
 template <typename type1, typename... types>
 Set<std::tuple<type1, types...>> cartesianProduct(Set<type1> set1, Set<types>... other_sets)
 {
-    std::cout << "sizeof...(types) = " << sizeof...(types) << std::endl;
     if(sizeof...(types) > 0)
     {
         Set<std::tuple<types...>> set2 = cartesianProduct<types...>(other_sets...);
@@ -225,47 +241,6 @@ Set<std::tuple<type1, types...>> cartesianProduct(Set<type1> set1, Set<types>...
     }
     else
     {
-        type1 *elms;
-        set1.getAllElements(elms);
-        int n = set1.getOrder();
-        std::tuple<type1> *singular = new std::tuple<type1>[n];
-        for(int i = 0; i < n; i++)
-        {
-            singular[i] = make_tuple(elms[i]);
-        }
-        Set<std::tuple<type1>> SinSet(singular, n);
-        delete[] elms;
-        delete[] singular;
-        return SinSet;
+        return cartesianProduct(set1, other_sets...);
     }
-
-    // int num_of_sets = sizeof...(types);
-    // if(num_of_sets > 1)
-    // {
-    //     int *array_of_orders = new int[num_of_sets];
-    //     std::tuple<Set<types...>> tuple_of_sets = std::make_tuple(elements...);
-    //     int order_product = 1;
-
-    //     for(int i = 0; i < num_of_sets; i++)
-    //     {
-    //         array_of_orders[i] = std::get<i>(tuple_of_sets).getOrder();
-    //         order_product *= array_of_orders[i];
-    //     }
-
-    //     std::tuple<types...> *array_of_tuples = new std::tuple<types...>[order_product];
-
-    //     for(int i = 0; i < order_product; i++)
-    //     {
-    //         int level = 1;
-    //         for(int j = 0; j < num_of_sets; j++)
-    //         {
-                
-    //         }
-    //     }
-    //     Set<std::tuple<types...>> product;
-    // }
-    // else
-    // {
-    //     return NULL;
-    // }
 }
