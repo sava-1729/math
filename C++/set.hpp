@@ -189,13 +189,19 @@ class Set
     }
 };
 
+template <typename... types>
+Set<std::tuple<types...>> cartesianProduct()
+{
+    return NULL;
+}
+
 template <typename type1, typename... types>
 Set<std::tuple<type1, types...>> cartesianProduct(Set<type1> set1, Set<types>... other_sets)
 {
     std::cout << "sizeof...(types) = " << sizeof...(types) << std::endl;
     if(sizeof...(types) > 0)
     {
-        Set<std::tuple<types...>> set2 = cartesianProduct<std::tuple<types...>>(other_sets...);
+        Set<std::tuple<types...>> set2 = cartesianProduct<types...>(other_sets...);
         type1 *elms1;
         set1.getAllElements(elms1);
         std::tuple<types...> *elms2;
