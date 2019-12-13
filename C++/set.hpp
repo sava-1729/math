@@ -1,7 +1,7 @@
 /*
  * @file set.hpp
- * @class Set
- * @brief contains basic class representing the mathematical object: Set,
+ * @class FiniteSet
+ * @brief contains basic class representing the mathematical object: FiniteSet,
  *        and the mathematical operations one can perform on a set.
  * @author Vatsal Srivastava
  * @copyright (c) 2019
@@ -15,14 +15,14 @@
 #include "utils.hpp"
 
 /**
- * @class Set
+ * @class FiniteSet
  * @brief A class representing a set, with overloaded operators for computing
  *        intersection, union, etc. It may also serve as a base class for other
  *        classes like Group, Ring, etc.
  * @tparam the type of elements that the set contains.
  */
 template <class ElementType>
-class Set
+class FiniteSet
 {
     ElementType* _elements;
     int _order;
@@ -42,7 +42,7 @@ class Set
 
     public:
 
-    Set(ElementType* elms_, int order_)
+    FiniteSet(ElementType* elms_, int order_)
     {
         reduce(elms_, order_);
         this -> _order = order_;
@@ -67,7 +67,7 @@ class Set
         return _order;
     }
 
-    Set<ElementType> operator^(Set<ElementType> const &A)const
+    FiniteSet<ElementType> operator^(FiniteSet<ElementType> const &A)const
     {
         ElementType *a_elms, *b_elms;
         int na, nb;
@@ -99,14 +99,14 @@ class Set
         {
             intersec_list[i] = a_elms[common_indices[i]];
         }
-        Set<ElementType> intersection = Set<ElementType>(intersec_list, intersec_order);
+        FiniteSet<ElementType> intersection = FiniteSet<ElementType>(intersec_list, intersec_order);
         delete[] intersec_list;
         delete[] a_elms;
         delete[] b_elms;
         return intersection;
     }
 
-    Set<ElementType> operator&(Set<ElementType> const &A)const
+    FiniteSet<ElementType> operator&(FiniteSet<ElementType> const &A)const
     {
         ElementType *a_elms, *b_elms;
         int na, nb;
@@ -128,16 +128,16 @@ class Set
             }
         }
         //std::cout << "Merged arrays\n";
-        Set<ElementType> Union = Set<ElementType>(union_elms, union_length);
+        FiniteSet<ElementType> Union = FiniteSet<ElementType>(union_elms, union_length);
         delete[] union_elms;
         delete[] a_elms;
         delete[] b_elms;
         return Union;
     }
 
-    Set<ElementType> operator-(Set<ElementType> const &A)const
+    FiniteSet<ElementType> operator-(FiniteSet<ElementType> const &A)const
     {
-        Set<ElementType> intersec = (*this) ^ A;
+        FiniteSet<ElementType> intersec = (*this) ^ A;
         ElementType *elms, *reduced;
         getAllElements(elms);
         int neworder = _order - intersec.getOrder();
@@ -150,13 +150,13 @@ class Set
                 j++;
             }
         }
-        Set<ElementType> setminus = Set<ElementType>(reduced, neworder);
+        FiniteSet<ElementType> setminus = FiniteSet<ElementType>(reduced, neworder);
         delete[] elms;
         delete[] reduced;
         return setminus;    
     }
 
-    bool operator<=(Set<ElementType> const &A)const
+    bool operator<=(FiniteSet<ElementType> const &A)const
     {
         bool flag = true;
         ElementType *self_elms;
@@ -168,35 +168,35 @@ class Set
         return flag;
     }
 
-    bool operator>=(Set<ElementType> const &A)const
+    bool operator>=(FiniteSet<ElementType> const &A)const
     {
         return A <= *(this);
     }
 
-    bool operator<(Set<ElementType> const &A)const
+    bool operator<(FiniteSet<ElementType> const &A)const
     {
         return (*(this) <= A) &&  (_order < A.getOrder());
     }
 
-    bool operator>(Set<ElementType> const &A)const
+    bool operator>(FiniteSet<ElementType> const &A)const
     {
         return (A <= *(this)) &&  (A.getOrder() < _order);
     }
 
-    bool operator==(Set<ElementType> const &A)const
+    bool operator==(FiniteSet<ElementType> const &A)const
     {
         return (*(this) <= A) && (A <= *(this));
     }
 };
 
 template <typename... types>
-Set<std::tuple<types...>> cartesianProduct()
+FiniteSet<std::tuple<types...>> cartesianProduct()
 {
     return NULL;
 }
 
 template <typename type1>
-Set<std::tuple<type1>> cartesianProduct(Set<type1> set1)
+FiniteSet<std::tuple<type1>> cartesianProduct(FiniteSet<type1> set1)
 {
     type1 *elms;
     set1.getAllElements(elms);
@@ -206,18 +206,18 @@ Set<std::tuple<type1>> cartesianProduct(Set<type1> set1)
     {
         singular[i] = std::make_tuple(elms[i]);
     }
-    Set<std::tuple<type1>> SinSet(singular, n);
+    FiniteSet<std::tuple<type1>> SinFiniteSet(singular, n);
     delete[] elms;
     delete[] singular;
-    return SinSet;
+    return SinFiniteSet;
 }
 
 template <typename type1, typename... types>
-Set<std::tuple<type1, types...>> cartesianProduct(Set<type1> set1, Set<types>... other_sets)
+FiniteSet<std::tuple<type1, types...>> cartesianProduct(FiniteSet<type1> set1, FiniteSet<types>... other_sets)
 {
     if(sizeof...(types) > 0)
     {
-        Set<std::tuple<types...>> set2 = cartesianProduct<types...>(other_sets...);
+        FiniteSet<std::tuple<types...>> set2 = cartesianProduct<types...>(other_sets...);
         type1 *elms1;
         set1.getAllElements(elms1);
         std::tuple<types...> *elms2;
@@ -233,7 +233,7 @@ Set<std::tuple<type1, types...>> cartesianProduct(Set<type1> set1, Set<types>...
                          std::tuple_cat(std::make_tuple(elms1[i]), elms2[j]);
             }
         }
-        Set<std::tuple<type1, types...>> product_set(product_array, n1 * n2);
+        FiniteSet<std::tuple<type1, types...>> product_set(product_array, n1 * n2);
         delete[] product_array;
         delete[] elms1;
         delete[] elms2;
