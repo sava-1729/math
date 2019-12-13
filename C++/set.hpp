@@ -8,6 +8,7 @@
  */
 
 #include <vector>
+#include <tuple>
 #include <iostream> //should be removed after completion of this file.
 #include <algorithm>
 
@@ -188,8 +189,77 @@ class Set
     }
 };
 
-template <class A, class B>
-Set<A> operator*(Set<A> a, Set<A> b)
+template <typename type1, typename... types>
+Set<std::tuple<type1, types...>> cartesianProduct(Set<type1> set1, Set<types>... other_sets)
 {
+    std::cout << "sizeof...(types) = " << sizeof...(types) << std::endl;
+    if(sizeof...(types) > 0)
+    {
+        Set<std::tuple<types...>> set2 = cartesianProduct<std::tuple<types...>>(other_sets...);
+        type1 *elms1;
+        set1.getAllElements(elms1);
+        std::tuple<types...> *elms2;
+        set2.getAllElements(elms2);
+        int n1 = set1.getOrder();
+        int n2 = set2.getOrder();
+        std::tuple<type1, types...> *product_array = new std::tuple<type1, types...>[n1 * n2];
+        for(int i = 0; i < n1; i++)
+        {
+            for(int j = 0; j < n2; j++)
+            {
+                product_array[j + i * n2] = \
+                         std::tuple_cat(std::make_tuple(elms1[i]), elms2[j]);
+            }
+        }
+        Set<std::tuple<type1, types...>> product_set(product_array, n1 * n2);
+        delete[] product_array;
+        delete[] elms1;
+        delete[] elms2;
+        return product_set;
+    }
+    else
+    {
+        type1 *elms;
+        set1.getAllElements(elms);
+        int n = set1.getOrder();
+        std::tuple<type1> *singular = new std::tuple<type1>[n];
+        for(int i = 0; i < n; i++)
+        {
+            singular[i] = make_tuple(elms[i]);
+        }
+        Set<std::tuple<type1>> SinSet(singular, n);
+        delete[] elms;
+        delete[] singular;
+        return SinSet;
+    }
 
+    // int num_of_sets = sizeof...(types);
+    // if(num_of_sets > 1)
+    // {
+    //     int *array_of_orders = new int[num_of_sets];
+    //     std::tuple<Set<types...>> tuple_of_sets = std::make_tuple(elements...);
+    //     int order_product = 1;
+
+    //     for(int i = 0; i < num_of_sets; i++)
+    //     {
+    //         array_of_orders[i] = std::get<i>(tuple_of_sets).getOrder();
+    //         order_product *= array_of_orders[i];
+    //     }
+
+    //     std::tuple<types...> *array_of_tuples = new std::tuple<types...>[order_product];
+
+    //     for(int i = 0; i < order_product; i++)
+    //     {
+    //         int level = 1;
+    //         for(int j = 0; j < num_of_sets; j++)
+    //         {
+                
+    //         }
+    //     }
+    //     Set<std::tuple<types...>> product;
+    // }
+    // else
+    // {
+    //     return NULL;
+    // }
 }
