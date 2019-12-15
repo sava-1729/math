@@ -9,10 +9,10 @@ int main()
 {
     string arr[] = {"vatsal", "srivastava", "alstav", "Trivas", "Sava", "sava", "srivastava"};
     string arr2[] = {"tanmay", "Srivastava", "yatman", "trivas", "sava", "sava", "srivastava"};
-    Set<string> S1 = Set<string>(arr, 7);
-    Set<string> S2 = Set<string>(arr2, 7);
-    Set<std::tuple<string,string>> S3 = cartesianProduct<string,string>(S1, S2);
-    // Set<string> S4 = S1 ^ S2;
+    FiniteSet<string> S1 = FiniteSet<string>(arr, 7);
+    FiniteSet<string> S2 = FiniteSet<string>(arr2, 7);
+    FiniteSet<std::tuple<string,string>> S3 = cartesianProduct<string,string>(S1, S2);
+    // FiniteSet<string> S4 = S1 ^ S2;
     std::tuple<string,string>* elms;
     S3.getAllElements(elms);
     int order = S3.getOrder();
@@ -20,6 +20,8 @@ int main()
     {
         cout << get<0>(elms[i]) << ", " <<  get<1>(elms[i]) << endl;
     }
+    cout << " \"sava\" < S1 = " << (string("sava") < S1) << endl;
+    cout << " \"sava\" < S2 = " << (string("sava") < S2) << endl;
     return 0;
 }
 // class A
@@ -49,8 +51,8 @@ int main()
 //     }
 //     int a[] = {1,32,35,12,57,8,63,3,7821};
 //     int b[] = {1,32,5,2,7,1,63,3,721};
-//     Set<int> s1 = Set<int>(a, 9);
-//     Set<int> s2 = Set<int>(b, 9);
-//     Set<int> s3 = s1 ^ s2;
+//     FiniteSet<int> s1 = FiniteSet<int>(a, 9);
+//     FiniteSet<int> s2 = FiniteSet<int>(b, 9);
+//     FiniteSet<int> s3 = s1 ^ s2;
 
     

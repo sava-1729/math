@@ -1,3 +1,5 @@
+#ifndef SET_HPP
+#define SET_HPP
 /*
  * @file set.hpp
  * @class FiniteSet
@@ -187,7 +189,30 @@ class FiniteSet
     {
         return (*(this) <= A) && (A <= *(this));
     }
+
+    bool operator>(ElementType const x)const
+    {
+        ElementType *elms;
+        getAllElements(elms);
+        int n = getOrder();
+        bool flag = false;
+        for(int i = 0; i < n; i++)
+        {
+            if(elms[i] == x)
+            {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
 };
+
+template <typename type>
+bool operator<(type const x, FiniteSet<type> const S)
+{
+    return S > x;
+}
 
 template <typename... types>
 FiniteSet<std::tuple<types...>> cartesianProduct()
@@ -244,3 +269,4 @@ FiniteSet<std::tuple<type1, types...>> cartesianProduct(FiniteSet<type1> set1, F
         return cartesianProduct(set1, other_sets...);
     }
 }
+#endif
