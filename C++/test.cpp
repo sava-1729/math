@@ -1,5 +1,7 @@
 #include <iostream>
 #include "set.hpp"
+#include "utils.hpp"
+#include "binary_operation.hpp"
 #include <vector>
 #include <string>
 #include <tuple>
