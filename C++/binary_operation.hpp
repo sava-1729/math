@@ -1,3 +1,5 @@
+#ifndef BINARY_OPERATION_HPP
+#define BINARY_OPERATION_HPP
 #include <map>
 #include <functional>
 #include "set.hpp"
@@ -37,3 +39,4 @@ class BinaryOperation
     }
 
 };
+#endif

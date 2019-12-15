@@ -1,3 +1,5 @@
+#ifndef UTILS_HPP
+#define UTILS_HPP
 /*
  * @file utils.hpp
  * @brief contains utility functions for simplifying internal computations
@@ -53,3 +55,4 @@ void swap(type* &arr1, int &len1, type* &arr2, int &len2)
     arr1 = arr2;
     arr2 = c;
 }
+#endif
