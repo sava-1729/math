@@ -1,12 +1,13 @@
 #ifndef BINARY_OPERATION_HPP
 #define BINARY_OPERATION_HPP
+
 #include <map>
 #include <functional>
 #include <tuple>
 #include "set.hpp"
 
 namespace ph = std::placeholders;
-template<typename type1, typename type2, typename type3>
+template<typename type1, typename type2, typename type3, typename T = FiniteSet<type3>>
 class BinaryOperation
 {
     std::map<std::tuple<type1,type2>, type3> _operationalMap;
@@ -49,7 +50,6 @@ class BinaryOperation
         }
     }
 
-    template <class T>
     BinaryOperation(FiniteSet<type1> Domain1, FiniteSet<type2> Domain2, FiniteSet<type3> CoDomain, \
                     T *object, type3 (T::*operator_fnc)(type1, type2), bool dynamic_op = false)
     {
