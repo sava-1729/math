@@ -44,7 +44,7 @@ class BinaryOperation
                     _operationalMap[std::make_tuple(elms_1[i], elms_2[j])] = operator_fnc(elms_1[i], elms_2[j]);
                 }
             }
-            operate = std::bind(_operate_map, ph::_1, ph::_2);
+            operate = std::bind(&BinaryOperation::_operate_map, this, ph::_1, ph::_2);
             delete[] elms_1;
             delete[] elms_2;
         }
@@ -73,7 +73,7 @@ class BinaryOperation
                     _operationalMap[std::make_tuple(elms_1[i], elms_2[j])] = object -> operator_fnc(elms_1[i], elms_2[j]);
                 }
             }
-            operate = std::bind(_operate_map, ph::_1, ph::_2);
+            operate = std::bind(&BinaryOperation::_operate_map, this, ph::_1, ph::_2);
             delete[] elms_1;
             delete[] elms_2;
         }
@@ -113,7 +113,7 @@ class BinaryOperation
         if(valid)
         {
             _operationalMap = operationalMap;
-            operate = std::bind(_operate_map, ph::_1, ph::_2);
+            operate = std::bind(&BinaryOperation::_operate_map, this, ph::_1, ph::_2);
         }
         delete[] elms_1;
         delete[] elms_2;
