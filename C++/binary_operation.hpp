@@ -14,7 +14,7 @@ class BinaryOperation
 
     type3 _operate_map(type1 operand1, type2 operand2)
     {
-        _operationalMap[std::make_tuple(operand1, operand2)];
+        return _operationalMap[std::make_tuple(operand1, operand2)];
     }
 
     public:
@@ -30,23 +30,21 @@ class BinaryOperation
         }
         else
         {
-            type1 *elms_1; type2 *elms_2;
-            int n1, n2;
-            Domain1.getAllElements(elms_1);
-            Domain2.getAllElements(elms_2);
-            n1 = Domain1.getOrder();
-            n2 = Domain2.getOrder();
+            FiniteSet<std::tuple<type1, type2>> cross = cartesianProduct(Domain1, Domain2);
+            std::tuple<type1, type2> *elms;
+            int n;
+            cross.getAllElements(elms);
+            n = cross.getOrder();
             _operationalMap.clear();
-            for(int i = 0; i < n1; i++)
+            for(int i = 0; i < n; i++)
             {
-                for(int j = 0; j < n2; j++)
-                {
-                    _operationalMap[std::make_tuple(elms_1[i], elms_2[j])] = operator_fnc(elms_1[i], elms_2[j]);
-                }
+                type1 op1 = std::get<0>(elms[i]);
+                type2 op2 = std::get<1>(elms[i]);
+                type3 result = operator_fnc(op1, op2);
+                _operationalMap[std::make_tuple(op1, op2)] = result;
             }
             operate = std::bind(&BinaryOperation::_operate_map, this, ph::_1, ph::_2);
-            delete[] elms_1;
-            delete[] elms_2;
+            delete[] elms;
         }
     }
 
@@ -59,54 +57,46 @@ class BinaryOperation
         }
         else
         {
-            type1 *elms_1; type2 *elms_2;
-            int n1, n2;
-            Domain1.getAllElements(elms_1);
-            Domain2.getAllElements(elms_2);
-            n1 = Domain1.getOrder();
-            n2 = Domain2.getOrder();
+            FiniteSet<std::tuple<type1, type2>> cross = cartesianProduct(Domain1, Domain2);
+            std::tuple<type1, type2> *elms;
+            int n;
+            cross.getAllElements(elms);
+            n = cross.getOrder();
             _operationalMap.clear();
-            for(int i = 0; i < n1; i++)
+            for(int i = 0; i < n; i++)
             {
-                for(int j = 0; j < n2; j++)
-                {
-                    _operationalMap[std::make_tuple(elms_1[i], elms_2[j])] = object -> operator_fnc(elms_1[i], elms_2[j]);
-                }
+                type1 op1 = std::get<0>(elms[i]);
+                type2 op2 = std::get<1>(elms[i]);
+                type3 result = (object ->* operator_fnc)(op1, op2);
+                _operationalMap[std::make_tuple(op1, op2)] = result;
             }
             operate = std::bind(&BinaryOperation::_operate_map, this, ph::_1, ph::_2);
-            delete[] elms_1;
-            delete[] elms_2;
+            delete[] elms;
         }
     }
 
     BinaryOperation(FiniteSet<type1> Domain1, FiniteSet<type2> Domain2, FiniteSet<type3> CoDomain, \
                     std::map<std::tuple<type1,type2>, type3> operationalMap)
     {
-        type1 *elms_1; type2 *elms_2;
-        int n1, n2;
-        Domain1.getAllElements(elms_1);
-        Domain2.getAllElements(elms_2);
-        n1 = Domain1.getOrder();
-        n2 = Domain2.getOrder();
+        FiniteSet<std::tuple<type1, type2>> cross = cartesianProduct(Domain1, Domain2);
+        std::tuple<type1, type2> *elms;
+        int n;
+        cross.getAllElements(elms);
+        n = cross.getOrder();
         bool valid = true;
         _operationalMap.clear();
-        for(int i = 0; i < n1; i++)
+        for(int i = 0; i < n; i++)
         {
-            for(int j = 0; j < n2; j++)
+            type1 op1 = std::get<0>(elms[i]);
+            type2 op2 = std::get<1>(elms[i]);
+            if(operationalMap.find(std::make_tuple(op1, op2)) == operationalMap.end())
             {
-                if(operationalMap.find(std::make_tuple(elms_1[i], elms_2[j])) == operationalMap.end())
-                {
-                    valid = false;
-                    break;
-                }
-                else if(!(operationalMap[std::make_tuple(elms_1[i], elms_2[j])] < CoDomain))
-                {
-                    valid = false;
-                    break;
-                }
+                valid = false;
+                break;
             }
-            if(!valid)
+            else if(!(operationalMap[std::make_tuple(op1, op2)] < CoDomain))
             {
+                valid = false;
                 break;
             }
         }
@@ -115,8 +105,7 @@ class BinaryOperation
             _operationalMap = operationalMap;
             operate = std::bind(&BinaryOperation::_operate_map, this, ph::_1, ph::_2);
         }
-        delete[] elms_1;
-        delete[] elms_2;
+        delete[] elms;
     }
 
 };
