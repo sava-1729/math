@@ -11,7 +11,7 @@
 
 #include <vector>
 #include <tuple>
-#include <iostream> //should be removed after completion of this file.
+#include <iostream>
 #include <algorithm>
 
 #include "utils.hpp"
@@ -206,6 +206,7 @@ class FiniteSet
         }
         return flag;
     }
+
 };
 
 template <typename type>
@@ -268,5 +269,24 @@ FiniteSet<std::tuple<type1, types...>> cartesianProduct(FiniteSet<type1> set1, F
     {
         return cartesianProduct(set1, other_sets...);
     }
+}
+
+template <typename type>
+std::ostream& operator<<(std::ostream& output, FiniteSet<type> const &S)
+{
+    type* elms;
+    S.getAllElements(elms);
+    int n = S.getOrder();
+    output << '{';
+    for(int i = 0; i < n; i++)
+    {
+        output << elms[i];
+        if(i < n-1)
+        {
+            output << ", ";
+        }
+    }
+    output << '}';
+    return output;
 }
 #endif
