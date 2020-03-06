@@ -1,10 +1,9 @@
-#ifndef SET_HPP
-#define SET_HPP
+#ifndef FINITE_SET_HPP
+#define FINITE_SET_HPP
 /*
- * @file set.hpp
- * @class FiniteSet
+ * @file finite_set.hpp
  * @brief contains basic class representing the mathematical object: FiniteSet,
- *        and the mathematical operations one can perform on a set.
+ *        and the mathematical operations one can perform on a finite_set.
  * @author Vatsal Srivastava
  * @copyright (c) 2019
  */
@@ -13,15 +12,16 @@
 #include <tuple>
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 
 #include "utils.hpp"
 
 /**
  * @class FiniteSet
- * @brief A class representing a set, with overloaded operators for computing
+ * @brief A class representing a finite_set, with overloaded operators for computing
  *        intersection, union, etc. It may also serve as a base class for other
  *        classes like Group, Ring, etc.
- * @tparam the type of elements that the set contains.
+ * @tparam datatype of the elements that the finite_set contains.
  */
 template <class ElementType>
 class FiniteSet
@@ -273,6 +273,25 @@ FiniteSet<std::tuple<type1, types...>> cartesianProduct(FiniteSet<type1> set1, F
 
 template <typename type>
 std::ostream& operator<<(std::ostream& output, FiniteSet<type> const &S)
+{
+    type* elms;
+    S.getAllElements(elms);
+    int n = S.getOrder();
+    output << '{';
+    for(int i = 0; i < n; i++)
+    {
+        output << elms[i];
+        if(i < n-1)
+        {
+            output << ", ";
+        }
+    }
+    output << '}';
+    return output;
+}
+
+template <typename type>
+std::stringstream& operator<<(std::stringstream& output, FiniteSet<type> const &S)
 {
     type* elms;
     S.getAllElements(elms);

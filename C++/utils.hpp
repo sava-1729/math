@@ -1,5 +1,9 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
+
+#include <vector>
+#include <math.h>
+
 /*
  * @file utils.hpp
  * @brief contains utility functions for simplifying internal computations
