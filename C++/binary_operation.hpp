@@ -163,8 +163,8 @@ BinaryOperation<type1, type2, type3, X>:: \
             else
             {
                 std::stringstream error_msg;
-                error_msg << "(" << op1 << " * " << op2 << ") does not belong to " << CoDomain;
-                throw std::invalid_argument(error_msg);
+                error_msg << "(" << op1 << " * " << op2 << ") = " << operationalMap[std::make_tuple(op1, op2)] << " does not belong to " << CoDomain;
+                throw std::domain_error(error_msg);
             }
         }
         operate = std::bind(&BinaryOperation::_operate_static_map, this, ph::_1, ph::_2);
@@ -194,7 +194,16 @@ BinaryOperation<type1, type2, type3, X>:: \
             type1 op1 = std::get<0>(elms[i]);
             type2 op2 = std::get<1>(elms[i]);
             type3 result = (object ->* operator_fnc)(op1, op2);
-            _operationalMap[std::make_tuple(op1, op2)] = result;
+            if(CoDomain.contains(result))
+            {
+                _operationalMap[std::make_tuple(op1, op2)] = result;
+            }
+            else
+            {
+                std::stringstream error_msg;
+                error_msg << "(" << op1 << " * " << op2 << ") = " << operationalMap[std::make_tuple(op1, op2)] << " does not belong to " << CoDomain;
+                throw std::domain_error(error_msg);
+            }
         }
         operate = std::bind(&BinaryOperation::_operate_static_map, this, ph::_1, ph::_2);
         delete[] elms;
@@ -225,7 +234,10 @@ BinaryOperation<type1, type2, type3, X>:: \
         else if(!(operationalMap[std::make_tuple(op1, op2)] < CoDomain))
         {
             valid = false;
-            break;
+            std::stringstream error_msg;
+            error_msg << "(" << op1 << " * " << op2 << ") = " << operationalMap[std::make_tuple(op1, op2)] << " does not belong to " << CoDomain;
+            throw std::domain_error(error_msg);
+            return;
         }
     }
     if(valid)
