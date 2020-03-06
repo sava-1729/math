@@ -163,7 +163,7 @@ BinaryOperation<type1, type2, type3, X>:: \
             else
             {
                 std::stringstream error_msg;
-                error_msg << "(" << op1 << " * " << op2 << ") = " << operationalMap[std::make_tuple(op1, op2)] << " does not belong to " << CoDomain;
+                error_msg << "(" << op1 << " * " << op2 << ") = " << result << " does not belong to " << CoDomain;
                 throw std::domain_error(error_msg);
             }
         }
@@ -201,7 +201,7 @@ BinaryOperation<type1, type2, type3, X>:: \
             else
             {
                 std::stringstream error_msg;
-                error_msg << "(" << op1 << " * " << op2 << ") = " << operationalMap[std::make_tuple(op1, op2)] << " does not belong to " << CoDomain;
+                error_msg << "(" << op1 << " * " << op2 << ") = " << result << " does not belong to " << CoDomain;
                 throw std::domain_error(error_msg);
             }
         }
